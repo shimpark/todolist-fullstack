@@ -3,6 +3,7 @@ using System.Text;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TodoApi.Data;
@@ -57,6 +58,10 @@ var frontendOrigins = rawFrontendOrigins
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddProblemDetails();
+
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<TodoDbContext>();
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -111,14 +116,16 @@ builder.Services.AddCors(options =>
         {
             policy.AllowAnyOrigin()
                   .AllowAnyHeader()
-                  .AllowAnyMethod();
+                  .AllowAnyMethod()
+                  .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
         }
         else
         {
             policy.WithOrigins(frontendOrigins)
                   .SetIsOriginAllowedToAllowWildcardSubdomains()
                   .AllowAnyHeader()
-                  .AllowAnyMethod();
+                  .AllowAnyMethod()
+                  .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
         }
     });
 });
@@ -145,6 +152,8 @@ using (var scope = app.Services.CreateScope())
 var enableSwagger = app.Environment.IsDevelopment()
     || string.Equals(app.Configuration["ENABLE_SWAGGER"], "true", StringComparison.OrdinalIgnoreCase);
 
+app.UseExceptionHandler();
+
 if (enableSwagger)
 {
     app.UseSwagger();
@@ -155,5 +164,6 @@ app.UseCors("FrontendPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHealthChecks("/healthz");
 
 app.Run();
