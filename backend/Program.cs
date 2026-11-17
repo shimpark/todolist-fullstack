@@ -37,7 +37,23 @@ var connectionString = builder.Configuration["DB_CONNECTION_STRING"]
     ?? builder.Configuration.GetConnectionString("DefaultConnection")
     ?? "Data Source=todos.db";
 
-var frontendOrigin = builder.Configuration["FRONTEND_ORIGIN"] ?? "http://localhost:5173";
+// SQLite DB 파일의 부모 디렉토리가 존재하는지 확인 및 자동 생성
+if (connectionString.StartsWith("Data Source=", StringComparison.OrdinalIgnoreCase))
+{
+    var rawPath = connectionString["Data Source=".Length..].Trim();
+    if (!string.IsNullOrEmpty(rawPath) && rawPath != ":memory:")
+    {
+        var dbDir = Path.GetDirectoryName(rawPath);
+        if (!string.IsNullOrEmpty(dbDir) && !Directory.Exists(dbDir))
+        {
+            Directory.CreateDirectory(dbDir);
+        }
+    }
+}
+
+var rawFrontendOrigins = builder.Configuration["FRONTEND_ORIGIN"] ?? "http://localhost:5173";
+var frontendOrigins = rawFrontendOrigins
+    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -91,9 +107,19 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontendPolicy", policy =>
     {
-        policy.WithOrigins(frontendOrigin)
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        if (frontendOrigins.Length == 1 && frontendOrigins[0] == "*")
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        }
+        else
+        {
+            policy.WithOrigins(frontendOrigins)
+                  .SetIsOriginAllowedToAllowWildcardSubdomains()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        }
     });
 });
 
@@ -116,7 +142,10 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-if (app.Environment.IsDevelopment())
+var enableSwagger = app.Environment.IsDevelopment()
+    || string.Equals(app.Configuration["ENABLE_SWAGGER"], "true", StringComparison.OrdinalIgnoreCase);
+
+if (enableSwagger)
 {
     app.UseSwagger();
     app.UseSwaggerUI();

@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: tsproject-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    region: singapore
+    envVars:
+      - key: ASPNETCORE_HTTP_PORTS
+        value: 8080
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: FRONTEND_ORIGIN
+        value: "*"
+      - key: DB_CONNECTION_STRING
+        value: "Data Source=/tmp/todos.db"
