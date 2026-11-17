@@ -1,0 +1,25 @@
+# Environment variables & secrets (Never commit secrets)
+**/.env
+**/.env.*
+!**/.env.example
+
+# .NET build & SQLite DB files
+**/bin/
+**/obj/
+**/*.db
+**/*.db-shm
+**/*.db-wal
+
+# Node / Frontend
+**/node_modules/
+**/dist/
+**/dist-ssr/
+frontend/dist/
+frontend/dist-ssr/
+
+# IDE, Editor & Logs
+.cursor/
+*.log
+mcp-cursor-executed.txt
+.DS_Store
+Thumbs.db

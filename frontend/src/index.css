@@ -1,0 +1,99 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  /* Common Light Tokens */
+  --bg-page: #f3f4f6;
+  --bg-card: #ffffff;
+  --text-main: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+  --border-color: #e5e7eb;
+  --border-focus: #2563eb;
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
+  --section-bg: #f9fafb;
+  --hover-bg: #e5e7eb;
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  /* Buttons */
+  --btn-ghost-bg: #f3f4f6;
+  --btn-ghost-hover: #e5e7eb;
+  --btn-ghost-text: #374151;
+
+  /* Password rules & meters */
+  --password-rules-bg: #f9fafb;
+  --password-rules-border: #e5e7eb;
+  --zxcvbn-bar-bg: #e5e7eb;
+
+  /* Tabs */
+  --tabs-bg: #f3f4f6;
+  --tab-active-bg: #ffffff;
+  --tab-active-text: #2563eb;
+  --tab-active-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  /* Badges & Tags */
+  --badge-low-bg: #f3f4f6;
+  --badge-low-text: #4b5563;
+  --due-tag-bg: #f3f4f6;
+  --due-tag-text: #4b5563;
+  --user-badge-bg: #eff6ff;
+  --user-badge-text: #1d4ed8;
+
+  /* Empty state */
+  --text-empty: #9ca3af;
+  --line-through-color: #9ca3af;
+}
+
+[data-theme='dark'] {
+  /* Dark Tokens */
+  --bg-page: #0f172a;
+  --bg-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --border-focus: #3b82f6;
+  --input-bg: #0f172a;
+  --input-border: #475569;
+  --section-bg: #0f172a;
+  --hover-bg: #334155;
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+
+  /* Buttons */
+  --btn-ghost-bg: #334155;
+  --btn-ghost-hover: #475569;
+  --btn-ghost-text: #f1f5f9;
+
+  /* Password rules & meters */
+  --password-rules-bg: #0f172a;
+  --password-rules-border: #334155;
+  --zxcvbn-bar-bg: #334155;
+
+  /* Tabs */
+  --tabs-bg: #0f172a;
+  --tab-active-bg: #334155;
+  --tab-active-text: #60a5fa;
+  --tab-active-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+
+  /* Badges & Tags */
+  --badge-low-bg: #334155;
+  --badge-low-text: #cbd5e1;
+  --due-tag-bg: #334155;
+  --due-tag-text: #cbd5e1;
+  --user-badge-bg: #1e3a8a;
+  --user-badge-text: #93c5fd;
+
+  /* Empty state */
+  --text-empty: #64748b;
+  --line-through-color: #64748b;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
